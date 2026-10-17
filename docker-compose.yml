@@ -1,0 +1,50 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      # Host already runs Homebrew Postgres on 5432, so expose the container DB on 5433.
+      - "127.0.0.1:5433:5432"
+    environment:
+      POSTGRES_DB: ${DB_NAME:-txp}
+      POSTGRES_USER: ${DB_USERNAME:-txp}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-txp}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build: ./transactionprocessor
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-txp}
+      DB_USERNAME: ${DB_USERNAME:-txp}
+      DB_PASSWORD: ${DB_PASSWORD:-txp}
+      STATEMENT_UPLOAD_DIRECTORY: /app/data/statements
+      TNG_PDF_PASSWORD: ${TNG_PDF_PASSWORD:-}
+      OCR_ENABLED: ${OCR_ENABLED:-true}
+    volumes:
+      - statements_data:/app/data/statements
+      - ./data:/data
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "127.0.0.1:3001:80"
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  statements_data:

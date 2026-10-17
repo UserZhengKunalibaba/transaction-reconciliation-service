@@ -1,0 +1,4 @@
+交易时间,交易分类,交易对方,对方账号,商品说明,收/支,金额,收/付款方式,交易状态,交易订单号,商家订单号,备注,
+2026-09-04 15:51:53,日用百货,Demo Merchant A,demo-account-001,Synthetic test purchase,支出,197.00,Mastercard(0000),交易成功,TEST-ALIPAY-ORDER-0001,TEST-MERCHANT-ORDER-0001,,
+2026-08-24 17:02:04,文化休闲,Demo Merchant B,demo-account-002,Synthetic test service,支出,138.00,Test Payment Method,交易成功,TEST-ALIPAY-ORDER-0002,TEST-MERCHANT-ORDER-0002,,
+2026-07-22 15:33:41,收入,Demo Customer,demo-account-003,Synthetic test income,收入,84.90,,交易成功,TEST-ALIPAY-ORDER-0003,TEST-MERCHANT-ORDER-0003,,
